@@ -18,5 +18,9 @@
   "homepage": "https://github.com/benfoxall/missiles#readme",
   "devDependencies": {
     "grpc-tools": "^1.8.1"
+  },
+  "dependencies": {
+    "google-protobuf": "^3.11.3",
+    "grpc": "^1.24.2"
   }
 }
