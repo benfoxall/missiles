@@ -587,7 +587,7 @@ proto.Status.prototype.toObject = function(opt_includeInstance) {
 proto.Status.toObject = function(includeInstance, msg) {
   var f, obj = {
     exploded: jspb.Message.getFieldWithDefault(msg, 1, false),
-    height: jspb.Message.getFieldWithDefault(msg, 2, "")
+    altitude: +jspb.Message.getFieldWithDefault(msg, 2, 0.0)
   };
 
   if (includeInstance) {
@@ -629,8 +629,8 @@ proto.Status.deserializeBinaryFromReader = function(msg, reader) {
       msg.setExploded(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setHeight(value);
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setAltitude(value);
       break;
     default:
       reader.skipField();
@@ -668,9 +668,9 @@ proto.Status.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getHeight();
-  if (f.length > 0) {
-    writer.writeString(
+  f = message.getAltitude();
+  if (f !== 0.0) {
+    writer.writeFloat(
       2,
       f
     );
@@ -696,17 +696,17 @@ proto.Status.prototype.setExploded = function(value) {
 
 
 /**
- * optional string height = 2;
- * @return {string}
+ * optional float altitude = 2;
+ * @return {number}
  */
-proto.Status.prototype.getHeight = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+proto.Status.prototype.getAltitude = function() {
+  return /** @type {number} */ (+jspb.Message.getFieldWithDefault(this, 2, 0.0));
 };
 
 
-/** @param {string} value */
-proto.Status.prototype.setHeight = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+/** @param {number} value */
+proto.Status.prototype.setAltitude = function(value) {
+  jspb.Message.setProto3FloatField(this, 2, value);
 };
 
 

@@ -27,5 +27,5 @@ message MissileCommand {
 
 message Status {
   bool exploded = 1;
-  string height = 2;
+  float altitude = 2;
 }
