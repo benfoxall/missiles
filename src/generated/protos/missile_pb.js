@@ -374,8 +374,8 @@ proto.MissileCommand.prototype.toObject = function(opt_includeInstance) {
 proto.MissileCommand.toObject = function(includeInstance, msg) {
   var f, obj = {
     token: (f = msg.getToken()) && proto.MissileToken.toObject(includeInstance, f),
-    directionDelta: +jspb.Message.getFieldWithDefault(msg, 2, 0.0),
-    speedDelta: +jspb.Message.getFieldWithDefault(msg, 3, 0.0)
+    steer: +jspb.Message.getFieldWithDefault(msg, 2, 0.0),
+    thrust: +jspb.Message.getFieldWithDefault(msg, 3, 0.0)
   };
 
   if (includeInstance) {
@@ -419,11 +419,11 @@ proto.MissileCommand.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 2:
       var value = /** @type {number} */ (reader.readFloat());
-      msg.setDirectionDelta(value);
+      msg.setSteer(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readFloat());
-      msg.setSpeedDelta(value);
+      msg.setThrust(value);
       break;
     default:
       reader.skipField();
@@ -462,14 +462,14 @@ proto.MissileCommand.serializeBinaryToWriter = function(message, writer) {
       proto.MissileToken.serializeBinaryToWriter
     );
   }
-  f = message.getDirectionDelta();
+  f = message.getSteer();
   if (f !== 0.0) {
     writer.writeFloat(
       2,
       f
     );
   }
-  f = message.getSpeedDelta();
+  f = message.getThrust();
   if (f !== 0.0) {
     writer.writeFloat(
       3,
@@ -510,31 +510,31 @@ proto.MissileCommand.prototype.hasToken = function() {
 
 
 /**
- * optional float direction_delta = 2;
+ * optional float steer = 2;
  * @return {number}
  */
-proto.MissileCommand.prototype.getDirectionDelta = function() {
+proto.MissileCommand.prototype.getSteer = function() {
   return /** @type {number} */ (+jspb.Message.getFieldWithDefault(this, 2, 0.0));
 };
 
 
 /** @param {number} value */
-proto.MissileCommand.prototype.setDirectionDelta = function(value) {
+proto.MissileCommand.prototype.setSteer = function(value) {
   jspb.Message.setProto3FloatField(this, 2, value);
 };
 
 
 /**
- * optional float speed_delta = 3;
+ * optional float thrust = 3;
  * @return {number}
  */
-proto.MissileCommand.prototype.getSpeedDelta = function() {
+proto.MissileCommand.prototype.getThrust = function() {
   return /** @type {number} */ (+jspb.Message.getFieldWithDefault(this, 3, 0.0));
 };
 
 
 /** @param {number} value */
-proto.MissileCommand.prototype.setSpeedDelta = function(value) {
+proto.MissileCommand.prototype.setThrust = function(value) {
   jspb.Message.setProto3FloatField(this, 3, value);
 };
 

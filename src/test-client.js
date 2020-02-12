@@ -31,8 +31,8 @@ client.build(request, (err, token) => {
 
     const command = new messages.MissileCommand();
     command.setToken(token)
-    command.setDirectionDelta(42)
-    command.setSpeedDelta(420)
+    command.setSteer(42)
+    command.setThrust(420)
 
     client.control(command, (err, response) => {
       console.log("COMMANDED?", err, response && response.toObject())

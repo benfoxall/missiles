@@ -21,8 +21,8 @@ message MissileToken {
 
 message MissileCommand {
   MissileToken token = 1;
-  float direction_delta = 2;
-  float speed_delta = 3;
+  float steer = 2;
+  float thrust = 3;
 }
 
 message Status {
