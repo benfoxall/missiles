@@ -46,7 +46,40 @@ function build(call, callback) {
   callback(null, reply);
 }
 
+function launch(call, callback) {
+
+  const uuid = call.request.getUuid()
+
+  console.log("LOOK FOR Rocket:", uuid)
+
+  var reply = new messages.Status();
+  reply.setAltitude(10)
+  reply.setExploded(false)
+
+  callback(null, reply);
+}
+
+function control(call, callback) {
+
+  if(call.request.hasToken()) {
+
+    const token = call.request.getToken()
+    const uuid = token.getUuid();
+
+    console.log("LOOK FOR Rocket:", uuid)
+
+    var reply = new messages.Status();
+    reply.setAltitude(10)
+    reply.setExploded(false)
+  
+    callback(null, reply);
+
+  } else {
+    callback(new Error('no token'))
+  }
+}
+
 var server = new grpc.Server();
-server.addService(services.MissileService, {build});
+server.addService(services.MissileService, {build, launch, control});
 server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 server.start();

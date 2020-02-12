@@ -12,9 +12,33 @@ var request = new messages.MissileDescription();
 request.setName('BEN 01')
 request.setColor('#f09')
 
-client.build(request, (err, response) => {
+client.build(request, (err, token) => {
   if(err) { throw err }
 
+  console.log("Built a rocket", token.getUuid())
 
-  console.log("Built a rocket", response.toObject())
+  setTimeout(() => {
+
+    client.launch(token, (err, response) => {
+      console.log("LAUNCHED?", err, response && response.toObject())
+    } )
+
+  }, 500)
+
+
+
+  setTimeout(() => {
+
+    const command = new messages.MissileCommand();
+    command.setToken(token)
+    command.setDirectionDelta(42)
+    command.setSpeedDelta(420)
+
+    client.control(command, (err, response) => {
+      console.log("COMMANDED?", err, response && response.toObject())
+    } )
+
+  }, 1000)
+
+
 })
