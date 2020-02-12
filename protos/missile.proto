@@ -1,0 +1,31 @@
+// Yo, I heard you like missiles?
+
+syntax = "proto3";
+
+service Missile {
+  rpc Build(MissileDescription) returns (MissileToken) {}
+
+  rpc Launch(MissileToken) returns (Status) {}
+
+  rpc Control(MissileCommand) returns (Status) {}
+}
+
+message MissileDescription {
+  string color = 1;
+  string name = 2;
+}
+
+message MissileToken {
+  string uuid = 1;
+}
+
+message MissileCommand {
+  MissileToken token = 1;
+  float direction_delta = 2;
+  float speed_delta = 3;
+}
+
+message Status {
+  bool exploded = 1;
+  string height = 2;
+}
