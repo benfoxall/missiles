@@ -3,8 +3,11 @@
 class Rocket {
 
   constructor(name, color) {
-    this.name = name
-    this.color = color
+    this.name = new String(name).slice(0, 20)
+    this.color = new String(color).slice(0, 20)
+
+    this.thrust = 0;
+    this.steer = 0;
 
     this.altitude = 0;
     this.speed = 0;
@@ -12,16 +15,32 @@ class Rocket {
     this.exploded = false;
 
     this.uuid = Math.random().toString(32).slice(2)
+    this.start = performance.now()
   }
 
   update(t) {
-    this.altitude += this.speed * t;
+    this.speed += this.thrust * t / 1000;
+    this.speed *= 0.94; // damp
+
+    this.altitude += this.speed * t / 1000;
   }
 
 }
 
 // where the rockets are at
-const state = new Set()
+const state = new Map()
+const {performance} = require('perf_hooks')
+
+let last = performance.now()
+setInterval(() => {
+  let now = performance.now()
+
+  for(const rocket of state.values()) {
+    rocket.update(now - last)
+  }
+
+  last = now;
+}, 10);
 
 
 var messages = require('./generated/protos/missile_pb');
@@ -40,6 +59,8 @@ function build(call, callback) {
 
   const uuid = rocket.uuid;
 
+  state.set(uuid, rocket)
+
   var reply = new messages.MissileToken();
   reply.setUuid(uuid)
 
@@ -52,11 +73,20 @@ function launch(call, callback) {
 
   console.log("LOOK FOR Rocket:", uuid)
 
-  var reply = new messages.Status();
-  reply.setAltitude(10)
-  reply.setExploded(false)
+  const rocket = state.get(uuid)
+  if(!rocket) {
+    callback(new Error("No Rocket"))
+  } else {
 
-  callback(null, reply);
+    rocket.thrust = 10;
+
+    var reply = new messages.Status();
+    reply.setAltitude(rocket.altitude)
+    reply.setExploded(rocket.exploded)
+  
+    callback(null, reply);
+  }
+
 }
 
 function control(call, callback) {
@@ -67,12 +97,22 @@ function control(call, callback) {
     const uuid = token.getUuid();
 
     console.log("LOOK FOR Rocket:", uuid)
+      
+    const rocket = state.get(uuid)
+    if(!rocket) {
+      callback(new Error("No Rocket"))
+    } else {
 
-    var reply = new messages.Status();
-    reply.setAltitude(10)
-    reply.setExploded(false)
-  
-    callback(null, reply);
+      rocket.thrust = call.request.getThrust()
+      rocket.steer = call.request.getSteer()
+
+      var reply = new messages.Status();
+      reply.setAltitude(rocket.altitude)
+      reply.setExploded(rocket.exploded)
+    
+      callback(null, reply);
+    }
+
 
   } else {
     callback(new Error('no token'))
