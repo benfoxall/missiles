@@ -9,6 +9,10 @@
         margin-bottom: 1em;
         box-shadow: 2px 3px 8px rgba(0,0,0,0.3);
       }
+      /* circle {
+        stroke: #fff;
+        stroke-width: 0.2;
+      } */
       body {
         font-family: Georgia, Times, 'Times New Roman', serif;
         background-color: #f1f1f1;
@@ -16,14 +20,16 @@
       h1, h2 {
         font-weight: 100;
         margin: 0;
+        font-size: 4vh;
       }
     </style>
   </head>
   <body>
 
-    <svg height="400">
-
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="10" fill="red"/>
     </svg>
+
     <h1>🚀 Rockets! </h1>
 
     <h2>🔌 Port = 50051</h2>
@@ -33,10 +39,28 @@
       const wsURL = document.location.href.replace(/^http/, 'ws');
 
       const ws = new WebSocket(wsURL);
-
+      
       ws.addEventListener('message', e => {
-        console.log(e.data)
 
+        const svg = document.querySelector('svg')
+        while(svg.firstChild) {
+          svg.firstChild.remove()
+        }
+
+        const items = JSON.parse(e.data);
+
+        window.items = items;
+
+        items.forEach(([key, item], i) => {
+          const c = document.createElementNS("http://www.w3.org/2000/svg", 'circle')
+          
+          c.setAttribute('r', 4);
+          c.setAttribute('cx', (i / items.length) * 100);
+          c.setAttribute('cy', 100 - item.altitude);
+          c.setAttribute('fill', item.color);
+
+          svg.appendChild(c)
+        })
       })
     </script>
   </body>

@@ -20,9 +20,15 @@ class Rocket {
 
   update(t) {
     this.speed += this.thrust * t / 1000;
-    this.speed *= 0.94; // damp
+    this.speed *= 0.8; // damp
 
     this.altitude += this.speed * t / 1000;
+    
+    if(this.altitude > 100) {
+      return false;
+    }
+
+    return true;
   }
 
 }
@@ -36,7 +42,11 @@ setInterval(() => {
   let now = performance.now()
 
   for(const rocket of state.values()) {
-    rocket.update(now - last)
+    const keep = rocket.update(now - last)
+
+    if(!keep) {
+      state.delete(rocket.uuid)
+    }
   }
 
   last = now;
@@ -143,8 +153,7 @@ wss.on('connection', function(ws, request) {
   const interval = setInterval(() => {
     ws.send(JSON.stringify(Array.from(state.entries())))
 
-
-  }, 100)
+  }, 50)
 
   ws.on('close', function() {
     clearInterval(interval);
