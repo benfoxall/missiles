@@ -123,3 +123,34 @@ var server = new grpc.Server();
 server.addService(services.MissileService, {build, launch, control});
 server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 server.start();
+
+
+// frontend
+
+
+const express = require('express');
+const http = require('http');
+const path = require('path');
+const WebSocket = require('ws');
+
+const app = express();
+app.use(express.static(path.join(__dirname, 'public')))
+const hserver = http.createServer(app);
+
+const wss = new WebSocket.Server({ server: hserver, clientTracking: false });
+
+wss.on('connection', function(ws, request) {
+  const interval = setInterval(() => {
+    ws.send(JSON.stringify(Array.from(state.entries())))
+
+
+  }, 100)
+
+  ws.on('close', function() {
+    clearInterval(interval);
+  });
+});
+
+hserver.listen(8080, function() {
+  console.log('Listening on http://localhost:8080');
+});

@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Rockets!</title>
+    <style>
+      svg {
+        background-image: linear-gradient(254deg, #A4D1EE 0%, #7000FF 98%);
+        width: 100%;
+        height: 70vh;
+        margin-bottom: 1em;
+        box-shadow: 2px 3px 8px rgba(0,0,0,0.3);
+      }
+      body {
+        font-family: Georgia, Times, 'Times New Roman', serif;
+        background-color: #f1f1f1;
+      }
+      h1, h2 {
+        font-weight: 100;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+
+    <svg height="400">
+
+    </svg>
+    <h1>🚀 Rockets! </h1>
+
+    <h2>🔌 Port = 50051</h2>
+    <h2>📗 missile.proto</h2>
+
+    <script>
+      const wsURL = document.location.href.replace(/^http/, 'ws');
+
+      const ws = new WebSocket(wsURL);
+
+      ws.addEventListener('message', e => {
+        console.log(e.data)
+
+      })
+    </script>
+  </body>
+</html>
