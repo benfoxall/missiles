@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 // I think this is pretty much how real ones work
 class Rocket {
